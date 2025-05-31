@@ -2,7 +2,6 @@ FROM ubuntu:24.04
 
 RUN apt-get update && apt-get upgrade -y
 
-
 # Basic's
 RUN apt install -y wget curl
 
@@ -17,5 +16,11 @@ RUN wget -O - https://apt.corretto.aws/corretto.key | gpg --dearmor -o /usr/shar
     apt-get update && \
     apt-get install -y java-21-amazon-corretto-jdk
 
+# Initialize (Guter Pfusch)
+RUN mkdir -p /var/lib/pufferpanel/config && \
+    mkdir -p /etc/pufferpanel && \
+    timeout 5 pufferpanel run || true && \
+    mv /etc/pufferpanel/config.json /var/lib/pufferpanel/config/config.json && \
+    ln -sf /var/lib/pufferpanel/config/config.json /etc/pufferpanel/config.json
 
 CMD ["pufferpanel", "run"]
