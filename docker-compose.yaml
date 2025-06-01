@@ -22,6 +22,7 @@ services:
       - storage:/var/lib/pufferpanel
     ports:
       - 8080:8080
+      - 8081:8081
       - 5657:5657
       - 25565:25565
     tty: true
