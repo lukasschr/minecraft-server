@@ -1,8 +1,8 @@
 services:
-  storage_sync:
+  remote_storage_sync:
     build:
       context: .
-      dockerfile: services/storage_sync/Dockerfile
+      dockerfile: services/remote_storage_sync/Dockerfile
     environment:
       - TZ=Europe/Berlin
       - LANG=en_US.UTF-8
@@ -10,6 +10,11 @@ services:
       - storage:/mnt/pufferpanel
     tty: true
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "[ -f /mnt/pufferpanel/.sync_bootstrap_complete ]"]
+      timeout: 3s
+      interval: 10s
+      retries: 360
 
   panel:
     build:
@@ -26,7 +31,8 @@ services:
       - 25565:25565
     tty: true
     depends_on:
-      - storage_sync
+      remote_storage_sync:
+        condition: service_healthy
     restart: unless-stopped
 
 
