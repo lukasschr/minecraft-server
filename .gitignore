@@ -1,3 +1,7 @@
 .*/
+__pycache__/
+
+.DS_Store
 
 setup.sh
+minecraft_server.py
